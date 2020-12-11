@@ -14,7 +14,7 @@ public class MovieDetail
     @SerializedName("id")
     private Integer id;
     @SerializedName("video")
-    private boolean video;
+    private Boolean video;
     @SerializedName("vote_average")
     private Double voteAverage;
     @SerializedName("title")
@@ -35,16 +35,16 @@ public class MovieDetail
     @SerializedName("backdrop_path")
     private String backdropPath;
     @SerializedName("adult")
-    private boolean adult;
+    private Boolean adult;
     @SerializedName("overview")
     private String overview;
     @SerializedName("release_date")
     private String releaseDate;
 
-    public MovieDetail(Integer voteCount, Integer id, boolean video, Double voteAverage,
+    public MovieDetail(Integer voteCount, Integer id, Boolean video, Double voteAverage,
                        String title, Double popularity, String posterPath, String originalLanguage,
                        String originalTitle, List<Integer> genreIds, String backdropPath,
-                       boolean adult, String overview, String releaseDate) {
+                       Boolean adult, String overview, String releaseDate) {
         this.voteCount = voteCount;
         this.id = id;
         this.video = video;
@@ -77,7 +77,7 @@ public class MovieDetail
         this.id = id;
     }
 
-    public boolean isVideo() {
+    public Boolean isVideo() {
         return video;
     }
 
@@ -149,7 +149,7 @@ public class MovieDetail
         this.backdropPath = backdropPath;
     }
 
-    public boolean isAdult() {
+    public Boolean isAdult() {
         return adult;
     }
 
@@ -172,4 +172,5 @@ public class MovieDetail
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
 }

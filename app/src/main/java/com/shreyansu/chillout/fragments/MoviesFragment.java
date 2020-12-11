@@ -15,6 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.shreyansu.chillout.R;
+import com.shreyansu.chillout.network.MovieDetail;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MoviesFragment extends Fragment
@@ -42,6 +46,11 @@ public class MoviesFragment extends Fragment
     private RecyclerView kpopularRecycView;
     private RecyclerView kupcomingRecycView;
     private RecyclerView ktopRatedRecycView;
+
+    private List<MovieDetail> knowShowingmovies;
+    private List<MovieDetail> kpopularmovies;
+    private List<MovieDetail> kupcomingmovies;
+    private List<MovieDetail> ktopratedmovies;
 
 
 
@@ -79,7 +88,14 @@ public class MoviesFragment extends Fragment
         (new LinearSnapHelper()).attachToRecyclerView(kupcomingRecycView);
 
         ktopRatedRecycView=(RecyclerView)view.findViewById(R.id.recycler_view_top_rated);
-        //TODO 9-12
+
+        knowShowingmovies=new ArrayList<>();
+        kpopularmovies=new ArrayList<>();
+        kupcomingmovies=new ArrayList<>();
+        ktopratedmovies=new ArrayList<>();
+
+
+
 
 
 
