@@ -1,4 +1,4 @@
-package com.shreyansu.chillout.network;
+package com.shreyansu.chillout.network.movies;
 
 import android.content.Intent;
 

@@ -4,10 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 
 import com.shreyansu.chillout.Database.DatabaseHelper;
-import com.shreyansu.chillout.network.MovieDetail;
+import com.shreyansu.chillout.network.movies.MovieDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class Favourite
         database.close();
     }
 
-    private static boolean isFavMovie(Context context, Integer movieId)
+    public static boolean isFavMovie(Context context, Integer movieId)
     {
         boolean isFavMovie;
         if(movieId==null)
@@ -50,8 +49,6 @@ public class Favourite
         cursor.close();
         database.close();
         return isFavMovie;
-
-
     }
     private static void removeMoviefromfavourite(Context context,Integer movieId)
     {

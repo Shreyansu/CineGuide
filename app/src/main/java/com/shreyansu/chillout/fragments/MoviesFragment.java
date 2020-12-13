@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.shreyansu.chillout.R;
-import com.shreyansu.chillout.network.MovieDetail;
+import com.shreyansu.chillout.network.movies.MovieDetail;
 
 import java.util.ArrayList;
 import java.util.List;
