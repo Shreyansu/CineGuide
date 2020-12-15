@@ -17,7 +17,8 @@ public class genreList
         return genres;
     }
 
-    public void setGenres(List<Genre> genres) {
+    public void setGenres(List<Genre> genres)
+    {
         this.genres = genres;
     }
 }

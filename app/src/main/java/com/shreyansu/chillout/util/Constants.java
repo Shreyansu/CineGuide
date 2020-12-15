@@ -9,4 +9,11 @@ public class Constants
     public static final String MOVIE_ID="movie_id";
 
     public static final String RATING_SYMB = "\u2605";
+
+
+    public static final int NOW_SHOWING_MOVIES_TYPE = 1;
+    public static final int POPULAR_MOVIES_TYPE = 2;
+    public static final int UPCOMING_MOVIES_TYPE = 3;
+    public static final int TOP_RATED_MOVIES_TYPE = 4;
+    public static final String VIEW_ALL_MOVIES_TYPE = "type_view_all_movies";
 }

@@ -1,4 +1,4 @@
-package com.shreyansu.chillout;
+package com.shreyansu.chillout.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -21,9 +21,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.shreyansu.chillout.activities.AboutActivity;
-import com.shreyansu.chillout.activities.IntroductionActivity;
-import com.shreyansu.chillout.activities.SearchActivity;
+import com.shreyansu.chillout.R;
 import com.shreyansu.chillout.fragments.FavouritesFragment;
 import com.shreyansu.chillout.fragments.MoviesFragment;
 import com.shreyansu.chillout.fragments.tvShowFragment;

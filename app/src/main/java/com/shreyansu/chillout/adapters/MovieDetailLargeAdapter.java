@@ -31,6 +31,12 @@ public class MovieDetailLargeAdapter extends RecyclerView.Adapter<MovieDetailLar
 
     private Context context;
     private List<MovieDetail> kMovies;
+
+    public MovieDetailLargeAdapter(Context context, List<MovieDetail> kMovies) {
+        this.context = context;
+        this.kMovies = kMovies;
+    }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
