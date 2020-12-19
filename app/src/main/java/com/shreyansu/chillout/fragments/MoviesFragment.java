@@ -22,6 +22,8 @@ import com.shreyansu.chillout.R;
 import com.shreyansu.chillout.activities.ViewAllMoviesActivity;
 import com.shreyansu.chillout.adapters.MovieDetailLargeAdapter;
 import com.shreyansu.chillout.adapters.MovieDetailSmallAdapter;
+import com.shreyansu.chillout.network.ApiClient;
+import com.shreyansu.chillout.network.ApiInterface;
 import com.shreyansu.chillout.network.movies.MovieDetail;
 import com.shreyansu.chillout.network.movies.NowShowingMoviesResponse;
 import com.shreyansu.chillout.network.movies.PopularMoviesResponse;
@@ -37,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MoviesFragment extends Fragment
@@ -83,8 +87,8 @@ public class MoviesFragment extends Fragment
     private Call<genreList> kgenreListCall;
     private Call<NowShowingMoviesResponse> kNowShowingMovieCall;
     private Call<PopularMoviesResponse> kPopularMovieCall;
-    private Call<upcomingMoviesResponse> kupcomingMovieResponse;
-    private Call<TopRatedMoviesResponse> ktopRatedMovieResponse;
+    private Call<upcomingMoviesResponse> kupcomingMoviecall;
+    private Call<TopRatedMoviesResponse> ktopRatedMovieCall;
 
 
     @Override
@@ -94,8 +98,7 @@ public class MoviesFragment extends Fragment
         View view= inflater.inflate(R.layout.fragment_movies, container, false);
 
 
-        kprogressBar=(ProgressBar)view.findViewById(R.id.progress_bar);
-        kprogressBar.setVisibility(view.GONE);
+
 
         knowshowingsectionload=false;
         kpopularmovieload=false;
@@ -112,6 +115,8 @@ public class MoviesFragment extends Fragment
         kpopularAllText=(TextView)view.findViewById(R.id.text_view_all_popular);
         ktopratedALLText=(TextView)view.findViewById(R.id.all_top_rated);
 
+        kprogressBar=(ProgressBar)view.findViewById(R.id.progress_bar);
+        kprogressBar.setVisibility(view.GONE);
 
         knowshowingRecyView=(RecyclerView)view.findViewById(R.id.recycler_view_now_showing);
         (new LinearSnapHelper()).attachToRecyclerView(knowshowingRecyView);
@@ -249,10 +254,10 @@ public class MoviesFragment extends Fragment
             kgenreListCall.cancel();
         if(kNowShowingMovieCall!=null)
             kNowShowingMovieCall.cancel();
-        if(kupcomingMovieResponse!=null)
-            kupcomingMovieResponse.cancel();
-        if(ktopRatedMovieResponse!=null)
-            ktopRatedMovieResponse.cancel();
+        if(kupcomingMoviecall!=null)
+            kupcomingMoviecall.cancel();
+        if(ktopRatedMovieCall!=null)
+            ktopRatedMovieCall.cancel();
         if (kPopularMovieCall!=null)
             kPopularMovieCall.cancel();
     }
@@ -269,8 +274,205 @@ public class MoviesFragment extends Fragment
         else
         {
             //TODO 16-12
+            ApiInterface apiService= ApiClient.getClient().create(ApiInterface.class);
+            kprogressBar.setVisibility(View.VISIBLE);
+            kgenreListCall=apiService.getMovieGenreList(getResources().getString(R.string.MOVIE_DB_API_KEY));
+            kgenreListCall.enqueue(new Callback<genreList>() {
+                @Override
+                public void onResponse(Call<genreList> call, Response<genreList> response)
+                {
+                    if(!response.isSuccessful())
+                    {
+                        kgenreListCall=call.clone();
+                        kgenreListCall.enqueue(this);
+                        return;
+                    }
+                    if(response.body()==null)
+                        return;
+                    if(response.body().getGenres()==null)
+                        return;
 
+                    MovieGenre.loadGenreList(response.body().getGenres());
+                    loadNowShowingMovies();
+                    loadPopularMovies();
+                    loadUpcomingMovies();
+                    loadTopRatedMovies();
+
+                }
+
+                @Override
+                public void onFailure(Call<genreList> call, Throwable t) {
+
+                }
+            });
 
         }
     }
+
+
+
+    private void loadNowShowingMovies()
+    {
+        ApiInterface apiService =ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        kNowShowingMovieCall=apiService.getNowShowing(getResources().getString(R.string.MOVIE_DB_API_KEY),1,"IN");
+        kNowShowingMovieCall.enqueue(new Callback<NowShowingMoviesResponse>() {
+            @Override
+            public void onResponse(Call<NowShowingMoviesResponse> call, Response<NowShowingMoviesResponse> response) {
+                if(!response.isSuccessful())
+                {
+                    kNowShowingMovieCall=call.clone();
+                    kNowShowingMovieCall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                knowshowingsectionload=true;
+                checkAllDataLoaded();
+                for(MovieDetail movieDetail : response.body().getResults())
+                {
+                    if(movieDetail!=null && movieDetail.getBackdropPath()!=null)
+                        knowShowingmovies.add(movieDetail);
+                }
+                knowshowingAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<NowShowingMoviesResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void loadPopularMovies()
+    {
+        ApiInterface apiService =ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        kPopularMovieCall=apiService.getPopularMovie(getResources().getString(R.string.MOVIE_DB_API_KEY),1,"IN");
+        kPopularMovieCall.enqueue(new Callback<PopularMoviesResponse>() {
+            @Override
+            public void onResponse(Call<PopularMoviesResponse> call, Response<PopularMoviesResponse> response) {
+                if(!response.isSuccessful())
+                {
+                    kPopularMovieCall=call.clone();
+                    kPopularMovieCall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                kpopularmovieload=true;
+                checkAllDataLoaded();
+                for(MovieDetail movieDetail : response.body().getResults())
+                {
+                    if(movieDetail!=null && movieDetail.getPosterPath()!=null)
+                        kpopularmovies.add(movieDetail);
+                }
+                kpopularAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<PopularMoviesResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+
+    private void loadUpcomingMovies()
+    {
+        ApiInterface apiService =ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        kupcomingMoviecall=apiService.getUpcomingMovie(getResources().getString(R.string.MOVIE_DB_API_KEY),1,"IN");
+        kupcomingMoviecall.enqueue(new Callback<upcomingMoviesResponse>() {
+            @Override
+            public void onResponse(Call<upcomingMoviesResponse> call, Response<upcomingMoviesResponse> response) {
+                if(!response.isSuccessful())
+                {
+                    kupcomingMoviecall = call.clone();
+                    kupcomingMoviecall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                kupcomingmovieload=true;
+                checkAllDataLoaded();
+                for(MovieDetail movieDetail : response.body().getResults())
+                {
+                    if(movieDetail!=null && movieDetail.getBackdropPath()!=null)
+                        kupcomingmovies.add(movieDetail);
+                }
+                kupcomingAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<upcomingMoviesResponse> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
+    private void loadTopRatedMovies()
+    {
+        ApiInterface apiService =ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        ktopRatedMovieCall =apiService.getTopRatedMovie(getResources().getString(R.string.MOVIE_DB_API_KEY),1,"IN");
+        ktopRatedMovieCall.enqueue(new Callback<TopRatedMoviesResponse>() {
+            @Override
+            public void onResponse(Call<TopRatedMoviesResponse> call, Response<TopRatedMoviesResponse> response) {
+                if(!response.isSuccessful())
+                {
+                    ktopRatedMovieCall=call.clone();
+                    ktopRatedMovieCall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                ktopratedmovieload=true;
+                checkAllDataLoaded();
+                for(MovieDetail movieDetail: response.body().getResults())
+                {
+                    if(movieDetail !=null && movieDetail.getPosterPath()!=null)
+                        ktopratedmovies.add(movieDetail);
+                }
+                ktopRatedAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<TopRatedMoviesResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+    private void checkAllDataLoaded()
+    {
+        if(knowshowingsectionload && kupcomingmovieload && ktopratedmovieload && kpopularmovieload)
+        {
+            kprogressBar.setVisibility(View.GONE);
+            kNowshowinglayout.setVisibility(View.VISIBLE);
+            kupcominglayout.setVisibility(View.VISIBLE);
+            ktopratedlayout.setVisibility(View.VISIBLE);
+            kpopularlayout.setVisibility(View.VISIBLE);
+            knowshowingRecyView.setVisibility(View.VISIBLE);
+            ktopRatedRecycView.setVisibility(View.VISIBLE);
+            kpopularRecycView.setVisibility(View.VISIBLE);
+            kupcomingRecycView.setVisibility(View.VISIBLE);
+
+        }
+    }
+
 }

@@ -1,26 +1,29 @@
 package com.shreyansu.chillout.network;
-
-
-
 import android.provider.CalendarContract;
-
 import androidx.annotation.IntegerRes;
+import androidx.annotation.StringDef;
 
 import com.shreyansu.chillout.network.movies.CreditMovieResponse;
 import com.shreyansu.chillout.network.movies.Movie;
+import com.shreyansu.chillout.network.movies.MovieCastPersonResponse;
 import com.shreyansu.chillout.network.movies.NowShowingMoviesResponse;
 import com.shreyansu.chillout.network.movies.PopularMoviesResponse;
 import com.shreyansu.chillout.network.movies.SimilarMovieResponse;
 import com.shreyansu.chillout.network.movies.TopRatedMoviesResponse;
 import com.shreyansu.chillout.network.movies.upcomingMoviesResponse;
+import com.shreyansu.chillout.network.tvshows.CastPersonResponse;
 import com.shreyansu.chillout.network.tvshows.ShowAirtodayResponse;
+import com.shreyansu.chillout.network.tvshows.ShowCreditResponse;
 import com.shreyansu.chillout.network.tvshows.ShowOnAirResponse;
 import com.shreyansu.chillout.network.tvshows.ShowPopularResponse;
 import com.shreyansu.chillout.network.tvshows.ShowTopRatedResponse;
+import com.shreyansu.chillout.network.tvshows.Shows;
+import com.shreyansu.chillout.network.tvshows.SimilarShowResponse;
 import com.shreyansu.chillout.network.videos.VideoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -28,16 +31,16 @@ public interface ApiInterface
 {
 
     @GET("movie/upcoming")
-    Call<upcomingMoviesResponse> getUpcomingMovieResponse(@Query("api_key") String apiKey,@Query("page") Integer page,@Query("region") String region);
+    Call<upcomingMoviesResponse> getUpcomingMovie(@Query("api_key") String apiKey,@Query("page") Integer page,@Query("region") String region);
 
     @GET("movie/top_rated")
-    Call<TopRatedMoviesResponse> getTopRatedMovieResponse(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("region") String region);
+    Call<TopRatedMoviesResponse> getTopRatedMovie(@Query("api_key") String apiKey, @Query("page") Integer page, @Query("region") String region);
 
     @GET("movie/now_playing")
-    Call<NowShowingMoviesResponse> getNowShowingResponse(@Query("api_key") String apiKey,@Query("page") String page,@Query("region") String region);
+    Call<NowShowingMoviesResponse> getNowShowing(@Query("api_key") String apiKey,@Query("page") Integer page,@Query("region") String region);
 
     @GET("movie/popular")
-    Call<PopularMoviesResponse> getPopularMovieResponse(@Query("api_key") String apiKey,@Query("page") Integer page,@Query("region") String region);
+    Call<PopularMoviesResponse> getPopularMovie(@Query("api_key") String apiKey,@Query("page") Integer page,@Query("region") String region);
 
 
     @GET("movie/{id}")
@@ -69,12 +72,32 @@ public interface ApiInterface
     @GET("tv/top_rated")
     Call<ShowTopRatedResponse> getTopRatedResponse(@Query("api_key") String apiKey,@Query("page") String page);
 
+    @GET("tv/{id}")
+    Call<Shows> getShowsDetails(@Path("id") Integer ShowId,@Query("api_key") String apiKey);
+
+    @GET("tv/{id}/videos")
+    Call<VideoResponse> getShowsVideos(@Path("id") Integer movieId,@Query("api_key") String apiKey);
+
+    @GET("tv/{id}/credits")
+    Call<ShowCreditResponse> getShowCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+
+    @GET("tv/{id}/similar")
+    Call<SimilarShowResponse> getSimilarShows(@Path("id") Integer movieId, @Query("api_key") String apiKey, @Query("page") Integer page);
 
 
+    @GET("genre/tv/list")
+    Call<com.shreyansu.chillout.network.tvshows.genreList> getShowsList(@Query("api_key") String apiKey);
 
 
+    //person
 
+    @GET("person/{id}")
+    Call<Actor> getActorDetail(@Path("id") Integer personId, @Query("api_key") String apiKey);
 
+    @GET("person/{id}/movie_credits")
+    Call<MovieCastPersonResponse> getMovieCastPerson(@Path("id") Integer personId, @Query("api_key") String apiKey);
 
+    @GET("person/{id}/tv_credits")
+    Call<CastPersonResponse> getShowsCastpersonResponse(@Path("id") Integer personId,@Query("api_key") String apiKey);
 
 }
