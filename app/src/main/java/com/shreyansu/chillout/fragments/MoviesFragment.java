@@ -133,7 +133,7 @@ public class MoviesFragment extends Fragment
         ktopratedmovies=new ArrayList<>();
 
 
-        knowshowingAdapter=new MovieDetailLargeAdapter(getContext(),knowShowingmovies);;
+        knowshowingAdapter=new MovieDetailLargeAdapter(getContext(),knowShowingmovies);
         kpopularAdapter=new MovieDetailSmallAdapter(getContext(),kpopularmovies);
         kupcomingAdapter=new MovieDetailLargeAdapter(getContext(),kupcomingmovies);
         ktopRatedAdapter=new MovieDetailSmallAdapter(getContext(),ktopratedmovies);
