@@ -1,6 +1,7 @@
 package com.shreyansu.chillout.fragments;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.shreyansu.chillout.BroadCastConnectivtiy;
 import com.shreyansu.chillout.R;
 import com.shreyansu.chillout.activities.ViewAllShowActivity;
-import com.shreyansu.chillout.adapters.MovieDetailLargeAdapter;
-import com.shreyansu.chillout.adapters.MovieDetailSmallAdapter;
 import com.shreyansu.chillout.adapters.ShowDetailLargeAdapter;
 import com.shreyansu.chillout.adapters.ShowsDetailSmallAdapter;
+import com.shreyansu.chillout.network.ApiClient;
+import com.shreyansu.chillout.network.ApiInterface;
 import com.shreyansu.chillout.network.tvshows.ShowAirtodayResponse;
 import com.shreyansu.chillout.network.tvshows.ShowDetail;
 import com.shreyansu.chillout.network.tvshows.ShowOnAirResponse;
@@ -29,12 +32,15 @@ import com.shreyansu.chillout.network.tvshows.ShowPopularResponse;
 import com.shreyansu.chillout.network.tvshows.ShowTopRatedResponse;
 import com.shreyansu.chillout.network.tvshows.*;
 import com.shreyansu.chillout.util.Constants;
+import com.shreyansu.chillout.util.ShowGenre;
 import com.shreyansu.chillout.util.connectivityStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class tvShowFragment extends Fragment
@@ -77,8 +83,11 @@ public class tvShowFragment extends Fragment
 
     private boolean isFragmentLoaded;
     private Snackbar snackbar;
+    private BroadCastConnectivtiy kBroadCastConnectivity;
+    private boolean isBroadcastRecieverRegistered=false;
 
 //    private Call<genre> kgenreListCall;
+//    private Call<genreList> kgenreListCall;
     private Call<genreList> kgenreListCall;
     private Call<ShowAirtodayResponse> kAiringTodayShowCall;
     private Call<ShowPopularResponse> kPopularShowCall;
@@ -226,6 +235,264 @@ public class tvShowFragment extends Fragment
     public void onResume()
     {
         super.onResume();
-        //TODO 22-12-2020
+        if(!isFragmentLoaded && !connectivityStatus.isConnected(getContext()))
+        {
+            snackbar=Snackbar.make(getActivity().findViewById(R.id.main_activity_fragment),"No Internet Connection", BaseTransientBottomBar.LENGTH_INDEFINITE);
+            snackbar.show();
+            kBroadCastConnectivity=new BroadCastConnectivtiy(new BroadCastConnectivtiy.connectivityRecieverListener() {
+                @Override
+                public void OnNetworkConnectionConnected()
+                {
+                    snackbar.dismiss();
+                    isFragmentLoaded=true;
+                    loadFragment();
+                    isBroadcastRecieverRegistered=false;
+                    getActivity().unregisterReceiver(kBroadCastConnectivity);
+
+                }
+            });
+            IntentFilter intentFilter =new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+            isBroadcastRecieverRegistered=true;
+            getActivity().registerReceiver(kBroadCastConnectivity,intentFilter);
+        }
+        else if(!isFragmentLoaded && connectivityStatus.isConnected(getContext()))
+        {
+            isFragmentLoaded=true;
+            loadFragment();
+        }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(isBroadcastRecieverRegistered)
+        {
+            isBroadcastRecieverRegistered=false;
+            snackbar.dismiss();
+            getActivity().unregisterReceiver(kBroadCastConnectivity);
+        }
+    }
+
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        if(kgenreListCall!=null)kgenreListCall.cancel();
+        if(konAirShowcall!=null)konAirShowcall.cancel();
+        if(ktopRatedShowCall!=null)ktopRatedShowCall.cancel();
+        if(kPopularShowCall!=null)kPopularShowCall.cancel();
+        if(kAiringTodayShowCall!=null) kAiringTodayShowCall.cancel();
+
+    }
+    private void loadFragment()
+    {
+        if(ShowGenre.isGenreListLoaded())
+        {
+            loadAiringTodayShows();
+            loadOnAirShows();
+            loadPopularShows();
+            loadTopRatedShows();
+        }
+        else
+        {
+            ApiInterface  apiService= ApiClient.getClient().create(ApiInterface.class);
+            kprogressBar.setVisibility(View.VISIBLE);
+            kgenreListCall=apiService.getShowsList(getResources().getString(R.string.MOVIE_DB_API_KEY));
+            kgenreListCall.enqueue(new Callback<genreList>() {
+                @Override
+                public void onResponse(Call<genreList> call, Response<genreList> response)
+                {
+                    if(!response.isSuccessful())
+                    {
+                        kgenreListCall=call.clone();
+                        kgenreListCall.enqueue(this);
+                        return;
+                    }
+                    if(response.body()==null)
+                        return;
+                    if(response.body().getGenres()==null)
+                        return;
+
+                    ShowGenre.loadGenre(response.body().getGenres());
+                    loadAiringTodayShows();
+                    loadOnAirShows();
+                    loadPopularShows();
+                    loadTopRatedShows();
+
+
+
+                }
+
+                @Override
+                public void onFailure(Call<genreList> call, Throwable t) {
+
+                }
+            });
+
+        }
+
+    }
+
+    private void loadTopRatedShows()
+    {
+        ApiInterface apiservice=ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        ktopRatedShowCall=apiservice.getTopRatedShows(getResources().getString(R.string.MOVIE_DB_API_KEY),1);
+        ktopRatedShowCall.enqueue(new Callback<ShowTopRatedResponse>() {
+            @Override
+            public void onResponse(Call<ShowTopRatedResponse> call, Response<ShowTopRatedResponse> response) {
+                if(!response.isSuccessful())
+                {
+                    ktopRatedShowCall=call.clone();
+                    ktopRatedShowCall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                ktopratedShowload=true;
+                checkAllDataLoaded();
+                for(ShowDetail detail : response.body().getResults())
+                {
+                    if(detail!=null && detail.getPosterPath()!=null)
+                        ktopratedShows.add(detail);
+                }
+                ktopRatedAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<ShowTopRatedResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void loadPopularShows()
+    {
+        ApiInterface apiservice=ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        kPopularShowCall=apiservice.getPopularShows(getResources().getString(R.string.MOVIE_DB_API_KEY),1);
+        kPopularShowCall.enqueue(new Callback<ShowPopularResponse>() {
+            @Override
+            public void onResponse(Call<ShowPopularResponse> call, Response<ShowPopularResponse> response) {
+                if(!response.isSuccessful())
+                {
+                    kPopularShowCall=call.clone();
+                    kPopularShowCall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                konAirShowload=true;
+                checkAllDataLoaded();
+                for(ShowDetail detail: response.body().getResults())
+                {
+                    if(detail!=null && detail.getBackdropPath()!=null)
+                        konAirShows.add(detail);
+                }
+                konAirAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<ShowPopularResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    private void loadOnAirShows()
+    {
+        ApiInterface apiservice=ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        konAirShowcall=apiservice.getOnAirShows(getResources().getString(R.string.MOVIE_DB_API_KEY),1);
+        konAirShowcall.enqueue(new Callback<ShowOnAirResponse>() {
+            @Override
+            public void onResponse(Call<ShowOnAirResponse> call, Response<ShowOnAirResponse> response) {
+                if(!response.isSuccessful())
+                {
+                    konAirShowcall=call.clone();
+                    konAirShowcall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                konAirShowload=true;
+                checkAllDataLoaded();
+                for(ShowDetail detail:response.body().getResults())
+                {
+                    if(detail!=null && detail.getPosterPath()!=null)
+                        konAirShows.add(detail);
+                }
+                konAirAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<ShowOnAirResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void loadAiringTodayShows()
+    {
+        ApiInterface apiservice=ApiClient.getClient().create(ApiInterface.class);
+        kprogressBar.setVisibility(View.VISIBLE);
+        kAiringTodayShowCall=apiservice.getAiringTodayShows(getResources().getString(R.string.MOVIE_DB_API_KEY),1);
+        kAiringTodayShowCall.enqueue(new Callback<ShowAirtodayResponse>() {
+            @Override
+            public void onResponse(Call<ShowAirtodayResponse> call, Response<ShowAirtodayResponse> response) {
+
+                if(!response.isSuccessful())
+                {
+                    kAiringTodayShowCall=call.clone();
+                    kAiringTodayShowCall.enqueue(this);
+                    return;
+                }
+                if(response.body()==null)
+                    return;
+                if(response.body().getResults()==null)
+                    return;
+                kAiringTodayload=true;
+                checkAllDataLoaded();
+                for(ShowDetail detail :response.body().getResults())
+                {
+                    if(detail!=null && detail.getBackdropPath()!=null)
+                        kAiringTodayShows.add(detail);
+                }
+                kAiringAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<ShowAirtodayResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+    private void checkAllDataLoaded()
+    {
+        if(kAiringTodayload && konAirShowload && ktopratedShowload && kpopularShowload)
+        {
+            kprogressBar.setVisibility(View.GONE);
+            kAiringtodaylayout.setVisibility(View.VISIBLE);
+            kAiringTodayRecyView.setVisibility(View.VISIBLE);
+            konAirlayout.setVisibility(View.VISIBLE);
+            konAirRecycView.setVisibility(View.VISIBLE);
+            kpopularlayout.setVisibility(View.VISIBLE);
+            kpopularRecycView.setVisibility(View.VISIBLE);
+            ktopratedlayout.setVisibility(View.VISIBLE);
+            ktopRatedRecycView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+
 }

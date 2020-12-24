@@ -29,17 +29,17 @@ public class DatabaseHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase)
     {
-        String queryCreateMovieTable= "CREATE TABLE" + FAVOURITE_MOVIE_TABLE_NAME +"("
-                + ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MOVIE_ID + "INTEGER, "
-                + POSTER_PATH + "TEXT, "
-                + NAME + "TEXT )";
+        String queryCreateMovieTable= "CREATE TABLE " + FAVOURITE_MOVIE_TABLE_NAME +" ( "
+                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MOVIE_ID + " INTEGER, "
+                + POSTER_PATH + " TEXT, "
+                + NAME + " TEXT )";
 
-        String queryCreateTVShowsTale = "CREATE TABLE" + FAVOURITE_TV_SHOWS_NAME +"("
-                + ID + "INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MOVIE_ID + "INTEGER, "
-                + POSTER_PATH + "TEXT, "
-                + NAME + "TEXT )";
+        String queryCreateTVShowsTale = "CREATE TABLE " + FAVOURITE_TV_SHOWS_NAME +" ( "
+                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + MOVIE_ID + " INTEGER, "
+                + POSTER_PATH + " TEXT, "
+                + NAME + " TEXT )";
         sqLiteDatabase.execSQL(queryCreateMovieTable);
         sqLiteDatabase.execSQL(queryCreateTVShowsTale);
 

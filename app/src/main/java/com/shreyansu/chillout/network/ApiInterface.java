@@ -70,7 +70,7 @@ public interface ApiInterface
     Call<ShowPopularResponse> getPopularShows(@Query("api_key") String apiKey,@Query("page") Integer page);
 
     @GET("tv/top_rated")
-    Call<ShowTopRatedResponse> getTopRatedResponse(@Query("api_key") String apiKey,@Query("page") String page);
+    Call<ShowTopRatedResponse> getTopRatedShows(@Query("api_key") String apiKey,@Query("page") Integer page);
 
     @GET("tv/{id}")
     Call<Shows> getShowsDetails(@Path("id") Integer ShowId,@Query("api_key") String apiKey);

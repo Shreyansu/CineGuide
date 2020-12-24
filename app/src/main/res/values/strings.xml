@@ -6,5 +6,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="MOVIE_DB_API_KEY"></string>
+    <string name="MOVIE_DB_API_KEY">c757115862fce1ba3dbf2908273635dc</string>
 </resources>
