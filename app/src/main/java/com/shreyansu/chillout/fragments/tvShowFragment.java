@@ -387,7 +387,7 @@ public class tvShowFragment extends Fragment
                     return;
                 if(response.body().getResults()==null)
                     return;
-                konAirShowload=true;
+                kpopularShowload=true;
                 checkAllDataLoaded();
                 for(ShowDetail detail: response.body().getResults())
                 {

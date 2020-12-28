@@ -1,6 +1,7 @@
 package com.shreyansu.chillout.fragments;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.shreyansu.chillout.BroadCastConnectivtiy;
 import com.shreyansu.chillout.R;
 import com.shreyansu.chillout.activities.ViewAllMoviesActivity;
 import com.shreyansu.chillout.adapters.MovieDetailLargeAdapter;
@@ -89,6 +91,8 @@ public class MoviesFragment extends Fragment
     private Call<PopularMoviesResponse> kPopularMovieCall;
     private Call<upcomingMoviesResponse> kupcomingMoviecall;
     private Call<TopRatedMoviesResponse> ktopRatedMovieCall;
+    private BroadCastConnectivtiy kConnectivityReciever;
+    private boolean isBroadCastRegistered;
 
 
     @Override
@@ -119,11 +123,12 @@ public class MoviesFragment extends Fragment
         kprogressBar.setVisibility(view.GONE);
 
         knowshowingRecyView=(RecyclerView)view.findViewById(R.id.recycler_view_now_showing);
-        (new LinearSnapHelper()).attachToRecyclerView(knowshowingRecyView);
+//        (new LinearSnapHelper()).attachToRecyclerView(knowshowingRecyView);
 
         kpopularRecycView=(RecyclerView)view.findViewById(R.id.recycler_view_popular);
         kupcomingRecycView=(RecyclerView)view.findViewById(R.id.recycler_view_upcoming);
-        (new LinearSnapHelper()).attachToRecyclerView(kupcomingRecycView);
+//        (new LinearSnapHelper()).attachToRecyclerView(kupcomingRecycView);
+
 
         ktopRatedRecycView=(RecyclerView)view.findViewById(R.id.recycler_view_top_rated);
 
@@ -215,12 +220,14 @@ public class MoviesFragment extends Fragment
     @Override
     public void onStart()
     {
+        super.onStart();
+
         knowshowingAdapter.notifyDataSetChanged();
         kupcomingAdapter.notifyDataSetChanged();
         kpopularAdapter.notifyDataSetChanged();
         ktopRatedAdapter.notifyDataSetChanged();
 
-        super.onStart();
+
     }
 
     @Override
@@ -230,8 +237,29 @@ public class MoviesFragment extends Fragment
         super.onResume();
         if(!isFragmentLoaded && !connectivityStatus.isConnected(getContext()))
         {
-            snackbar=Snackbar.make(getActivity().findViewById(R.id.main_activity_fragment),"No Internet Connection", BaseTransientBottomBar.LENGTH_INDEFINITE);
+            snackbar=Snackbar.make(getActivity().findViewById(R.id.main_activity_fragment),"No Internet Connection",
+                    BaseTransientBottomBar.LENGTH_INDEFINITE);
             snackbar.show();
+            kConnectivityReciever=new BroadCastConnectivtiy(new BroadCastConnectivtiy.connectivityRecieverListener() {
+                @Override
+                public void OnNetworkConnectionConnected()
+                {
+                    snackbar.dismiss();
+                    isFragmentLoaded=true;
+                    loadFragment();
+                    getActivity().unregisterReceiver(kConnectivityReciever);
+
+                }
+            });
+            IntentFilter intentFilter =new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+            isBroadCastRegistered=true;
+            getActivity().registerReceiver(kConnectivityReciever,intentFilter);
+
+        }
+        else if(!isFragmentLoaded && connectivityStatus.isConnected(getContext()))
+        {
+            isFragmentLoaded=true;
+            loadFragment();
         }
 
 
@@ -241,7 +269,12 @@ public class MoviesFragment extends Fragment
     public void onPause()
     {
         super.onPause();
-        snackbar.dismiss();
+        if(isBroadCastRegistered)
+        {
+            snackbar.dismiss();
+            isBroadCastRegistered=false;
+            getActivity().unregisterReceiver(kConnectivityReciever);
+        }
     }
 
 
@@ -316,7 +349,9 @@ public class MoviesFragment extends Fragment
         ApiInterface apiService =ApiClient.getClient().create(ApiInterface.class);
         kprogressBar.setVisibility(View.VISIBLE);
         kNowShowingMovieCall=apiService.getNowShowing(getResources().getString(R.string.MOVIE_DB_API_KEY),1,"IN");
-        kNowShowingMovieCall.enqueue(new Callback<NowShowingMoviesResponse>() {
+        kNowShowingMovieCall.enqueue(new Callback<NowShowingMoviesResponse>()
+        {
+
             @Override
             public void onResponse(Call<NowShowingMoviesResponse> call, Response<NowShowingMoviesResponse> response) {
                 if(!response.isSuccessful())
@@ -471,7 +506,6 @@ public class MoviesFragment extends Fragment
             ktopRatedRecycView.setVisibility(View.VISIBLE);
             kpopularRecycView.setVisibility(View.VISIBLE);
             kupcomingRecycView.setVisibility(View.VISIBLE);
-
         }
     }
 

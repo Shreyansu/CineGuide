@@ -67,7 +67,7 @@ public class ShowsDetailSmallAdapter extends RecyclerView.Adapter<ShowsDetailSma
             ShowFavButtonImage=(ImageButton) itemView.findViewById(R.id.image_button_fav_show_card);
 
             ShowPosterImage.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.31);
-            ShowPosterImage.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.31) / 0.66);
+            ShowPosterImage.getLayoutParams().height = (int) ((context.getResources().getDisplayMetrics().widthPixels * 0.31) / 0.9);
 
 
             ShowCard.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +75,7 @@ public class ShowsDetailSmallAdapter extends RecyclerView.Adapter<ShowsDetailSma
                 public void onClick(View view)
                 {
                     Intent intent =new Intent(context, getShowDetail.class);
-                    intent.putExtra(Constants.SHOW_ID,kShows.get(getAdapterPosition()).getId());
+                    intent.putExtra(Constants.TV_SHOW_ID,kShows.get(getAdapterPosition()).getId());
                     context.startActivity(intent);
 
                 }
@@ -85,7 +85,7 @@ public class ShowsDetailSmallAdapter extends RecyclerView.Adapter<ShowsDetailSma
                 public void onClick(View view) {
                     view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                     Favourite.addTVShowsToFav(context,kShows.get(getAdapterPosition()).getId(),kShows.get(getAdapterPosition()).getPosterPath(),kShows.get(getAdapterPosition()).getName());
-                    ShowFavButtonImage.setImageResource(R.drawable.heart256);
+                    ShowFavButtonImage.setImageResource(R.drawable.ic_facourite);
                     ShowFavButtonImage.setEnabled(false);
                 }
             });

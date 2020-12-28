@@ -59,13 +59,13 @@ public class MovieDetailSmallAdapter extends RecyclerView.Adapter<MovieDetailSma
 
         if(Favourite.isFavMovie(context,kMovies.get(position).getId()))
         {
-            holder.movieFavButton.setImageResource(R.drawable.heart256);
+            holder.movieFavButton.setImageResource(R.drawable.ic_facourite);
             holder.movieFavButton.setEnabled(false);
         }
         else
         {
             holder.movieFavButton.setImageResource(R.drawable.ic_favourite);
-            holder.movieFavButton.setEnabled(false);
+            holder.movieFavButton.setEnabled(true);
         }
 
 
@@ -99,7 +99,7 @@ public class MovieDetailSmallAdapter extends RecyclerView.Adapter<MovieDetailSma
             movieFavButton=(ImageButton) itemView.findViewById(R.id.image_button_fav_show_card);
 
             moviePosterImage.getLayoutParams().width=(int) (context.getResources().getDisplayMetrics().widthPixels*0.31);
-            moviePosterImage.getLayoutParams().height=(int) (context.getResources().getDisplayMetrics().heightPixels*0.31/0.65);
+            moviePosterImage.getLayoutParams().height=(int) (context.getResources().getDisplayMetrics().heightPixels*0.31/0.9);
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -116,7 +116,7 @@ public class MovieDetailSmallAdapter extends RecyclerView.Adapter<MovieDetailSma
                 {
                     view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                     Favourite.addMovieToFav(context,kMovies.get(getAdapterPosition()).getId(),kMovies.get(getAdapterPosition()).getPosterPath(),kMovies.get(getAdapterPosition()).getTitle());
-                    movieFavButton.setImageResource(R.drawable.heart256);
+                    movieFavButton.setImageResource(R.drawable.ic_facourite);
                     movieFavButton.setEnabled(false);
 
 

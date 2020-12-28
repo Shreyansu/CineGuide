@@ -72,7 +72,7 @@ public class MovieDetailLargeAdapter extends RecyclerView.Adapter<MovieDetailLar
 
          if(Favourite.isFavMovie(context,kMovies.get(position).getId()))
          {
-             holder.movieFavimage.setImageResource(R.drawable.heart256);
+             holder.movieFavimage.setImageResource(R.drawable.ic_facourite);
              holder.movieFavimage.setEnabled(false);
          }
          else
@@ -127,8 +127,8 @@ public class MovieDetailLargeAdapter extends RecyclerView.Adapter<MovieDetailLar
             genreText=(TextView)itemView.findViewById(R.id.text_view_genre);
             movieFavimage=(ImageButton)itemView.findViewById(R.id.image_button_fav_show_card);
 
-             imageLayout.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels*0.09);
-              imageLayout.getLayoutParams().height =(int) (context.getResources().getDisplayMetrics().heightPixels*0.09/1.77);
+             imageLayout.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels*0.5);
+              imageLayout.getLayoutParams().height =(int) (context.getResources().getDisplayMetrics().heightPixels*0.5/1.6);
 
               movieCard.setOnClickListener(new View.OnClickListener() {
                   @Override
@@ -141,12 +141,13 @@ public class MovieDetailLargeAdapter extends RecyclerView.Adapter<MovieDetailLar
                   }
               });
 
-              movieFavimage.setOnClickListener(new View.OnClickListener() {
+              movieFavimage.setOnClickListener(new View.OnClickListener()
+              {
                   @Override
                   public void onClick(View view) {
                       view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                       Favourite.addMovieToFav(context,kMovies.get(getAdapterPosition()).getId(),kMovies.get(getAdapterPosition()).getPosterPath(),kMovies.get(getAdapterPosition()).getTitle());
-                      movieFavimage.setImageResource(R.drawable.heart256);
+                      movieFavimage.setImageResource(R.drawable.ic_facourite);
                       movieFavimage.setEnabled(false);
 
                   }

@@ -64,17 +64,17 @@ public class Favourite
         database.close();
     }
 
-    public static void addTVShowsToFav(Context context,Integer movieId,String posterPath,String name)
+    public static void addTVShowsToFav(Context context,Integer showID,String posterPath,String name)
     {
-        if(movieId==null)
+        if(showID==null)
             return;
         DatabaseHelper databaseHelper =new DatabaseHelper(context);
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
-        if(!isFavMovie(context,movieId))
+        if(!isFavMovie(context,showID))
         {
             ContentValues contentValues=new ContentValues();
-            contentValues.put(DatabaseHelper.MOVIE_ID,movieId);
+            contentValues.put(DatabaseHelper.TV_SHOW_ID,showID);
             contentValues.put(DatabaseHelper.POSTER_PATH,posterPath);
             contentValues.put(DatabaseHelper.NAME,name);
 
@@ -98,15 +98,15 @@ public class Favourite
         database.close();
         return isTVShowFav;
     }
-    private static void removeTVShowsfromfavourite(Context context,Integer movieId)
+    private static void removeTVShowsfromfavourite(Context context,Integer showId)
     {
-        if(movieId==null)
+        if(showId==null)
             return ;
         DatabaseHelper databaseHelper=new DatabaseHelper(context);
         SQLiteDatabase database=databaseHelper.getWritableDatabase();
-        if(isFavMovie(context,movieId))
+        if(isFavMovie(context,showId))
         {
-            database.delete(DatabaseHelper.FAVOURITE_TV_SHOWS_NAME,DatabaseHelper.MOVIE_ID + " = " + movieId,null);
+            database.delete(DatabaseHelper.FAVOURITE_TV_SHOWS_NAME,DatabaseHelper.TV_SHOW_ID+ " = " + showId,null);
 
         }
         database.close();
@@ -141,10 +141,10 @@ public class Favourite
         Cursor  cursor = database.query(DatabaseHelper.FAVOURITE_TV_SHOWS_NAME,null,null,null,null,null,DatabaseHelper.ID +"DESC");
         while(cursor.moveToNext())
         {
-            int movieId=cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MOVIE_ID));
+            int showId=cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TV_SHOW_ID));
             String posterPath=cursor.getString(cursor.getColumnIndex(DatabaseHelper.POSTER_PATH));
             String name=cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME));
-            favTVShows.add(new MovieDetail(null,movieId,null,null, name,null,posterPath,null,null,null,null,null,null,null));
+            favTVShows.add(new MovieDetail(null,showId,null,null, name,null,posterPath,null,null,null,null,null,null,null));
 
         }
         cursor.close();

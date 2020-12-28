@@ -35,7 +35,6 @@
                     android:text="Now showing"
                     android:layout_gravity="left"
                     android:textColor="@color/colorNavigationHeaderBackground"
-
                     android:textSize="20sp"/>
                 
                 
@@ -50,13 +49,10 @@
                     android:textSize="12sp"/>
                 
             </FrameLayout>
-            
-            
-            
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_now_showing"
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:visibility="gone"/>

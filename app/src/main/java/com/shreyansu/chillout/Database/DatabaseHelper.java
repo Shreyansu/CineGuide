@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.telephony.mbms.StreamingServiceInfo;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME="database.db";
     public static final String FAVOURITE_MOVIE_TABLE_NAME="FavouriteMoviesTable";
-    public static final String FAVOURITE_TV_SHOWS_NAME="FavouriteTVShowstable";
+    public static final String FAVOURITE_TV_SHOWS_NAME="FavouriteTVShowsTable";
     public static final String ID="id";
     public static final String MOVIE_ID="movie_id";
     public static final String TV_SHOW_ID="tv_show_id";
@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
         String queryCreateTVShowsTale = "CREATE TABLE " + FAVOURITE_TV_SHOWS_NAME +" ( "
                 + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + MOVIE_ID + " INTEGER, "
+                + TV_SHOW_ID + " INTEGER, "
                 + POSTER_PATH + " TEXT, "
                 + NAME + " TEXT )";
         sqLiteDatabase.execSQL(queryCreateMovieTable);

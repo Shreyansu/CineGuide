@@ -60,14 +60,16 @@ public class ShowDetailLargeAdapter extends RecyclerView.Adapter<ShowDetailLarge
 
         if(kShows.get(position).getVoteAverage()!=null && kShows.get(position).getVoteAverage()>0)
         {
-            holder.ShowRating.setText(String.format("%.1f",kShows.get(position).getVoteAverage()+Constants.RATING_SYMB));
+            holder.ShowRating.setText(String.format("%.1f",kShows.get(position).getVoteAverage())+Constants.RATING_SYMB);
         }
         else
             holder.ShowRating.setVisibility(View.GONE);
 
+        setGenres(holder, kShows.get(position));
+
         if(Favourite.isTVShowFav(context,kShows.get(position).getId()))
         {
-            holder.ShowFavimage.setImageResource(R.drawable.heart256);
+            holder.ShowFavimage.setImageResource(R.drawable.ic_facourite);
             holder.ShowFavimage.setEnabled(false);
 
         }
@@ -78,7 +80,7 @@ public class ShowDetailLargeAdapter extends RecyclerView.Adapter<ShowDetailLarge
         }
 
 
-        setGenres(holder, kShows.get(position));
+
 
 
     }
@@ -126,15 +128,15 @@ public class ShowDetailLargeAdapter extends RecyclerView.Adapter<ShowDetailLarge
             ShowgenreText=(TextView)itemView.findViewById(R.id.text_view_genre);
             ShowFavimage=(ImageButton)itemView.findViewById(R.id.image_button_fav_show_card);
 
-            imageLayout.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels*0.09);
-            imageLayout.getLayoutParams().height =(int) (context.getResources().getDisplayMetrics().heightPixels*0.09/1.77);
+            imageLayout.getLayoutParams().width = (int) (context.getResources().getDisplayMetrics().widthPixels*0.5);
+            imageLayout.getLayoutParams().height =(int) (context.getResources().getDisplayMetrics().heightPixels*0.5/1.6);
 
             ShowCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view)
                 {
                     Intent intent =new Intent(context, getShowDetail.class);
-                    intent.putExtra(Constants.SHOW_ID,kShows.get(getAdapterPosition()).getId());
+                    intent.putExtra(Constants.TV_SHOW_ID,kShows.get(getAdapterPosition()).getId());
                     context.startActivity(intent);
                 }
             });
@@ -144,7 +146,7 @@ public class ShowDetailLargeAdapter extends RecyclerView.Adapter<ShowDetailLarge
                 {
                     view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                     Favourite.addTVShowsToFav(context,kShows.get(getAdapterPosition()).getId(),kShows.get(getAdapterPosition()).getPosterPath(),kShows.get(getAdapterPosition()).getName());
-                    ShowFavimage.setImageResource(R.drawable.heart256);
+                    ShowFavimage.setImageResource(R.drawable.ic_facourite);
                     ShowFavimage.setEnabled(false);
 
 
