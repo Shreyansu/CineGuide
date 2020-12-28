@@ -148,13 +148,8 @@ public class ShowDetailLargeAdapter extends RecyclerView.Adapter<ShowDetailLarge
                     Favourite.addTVShowsToFav(context,kShows.get(getAdapterPosition()).getId(),kShows.get(getAdapterPosition()).getPosterPath(),kShows.get(getAdapterPosition()).getName());
                     ShowFavimage.setImageResource(R.drawable.ic_facourite);
                     ShowFavimage.setEnabled(false);
-
-
                 }
             });
-
-
-
         }
     }
 }

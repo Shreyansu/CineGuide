@@ -376,7 +376,9 @@ public class MoviesFragment extends Fragment
             }
 
             @Override
-            public void onFailure(Call<NowShowingMoviesResponse> call, Throwable t) {
+            public void onFailure(Call<NowShowingMoviesResponse> call, Throwable t)
+            {
+
 
             }
         });
