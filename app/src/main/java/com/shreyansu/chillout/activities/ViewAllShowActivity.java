@@ -56,9 +56,9 @@ public class ViewAllShowActivity extends AppCompatActivity
         setContentView(R.layout.activity_view_all_show);
 
 
-        Toolbar toolbar =(Toolbar) findViewById(R.id.toolbar1);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        Toolbar toolbar =(Toolbar) findViewById(R.id.toolbar1);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         kShowsType=getIntent().getIntExtra(Constants.VIEW_ALL_SHOWS_TYPE,-1);
 
@@ -143,6 +143,8 @@ public class ViewAllShowActivity extends AppCompatActivity
     }
     private void loadShows(int kShowsType)
     {
+        if(lastPage)
+            return;
         ApiInterface apiservice = ApiClient.getClient().create(ApiInterface.class);
 
         switch (kShowsType)

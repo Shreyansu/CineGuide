@@ -7,4 +7,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="MOVIE_DB_API_KEY">c757115862fce1ba3dbf2908273635dc</string>
+    <string name="movie">Movie</string>
+    <string name="TVshows">TV Show</string>
+
 </resources>

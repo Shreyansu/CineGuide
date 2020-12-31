@@ -52,9 +52,9 @@ public class ViewAllMoviesActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all_movies);
-        Toolbar toolbar =(Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        Toolbar toolbar =(Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         kmovieType=getIntent().getIntExtra(Constants.VIEW_ALL_MOVIES_TYPE,-1);
 

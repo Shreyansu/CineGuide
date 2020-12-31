@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.shreyansu.chillout.Database.DatabaseHelper;
 import com.shreyansu.chillout.network.movies.MovieDetail;
+import com.shreyansu.chillout.network.tvshows.ShowDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +119,7 @@ public class Favourite
         SQLiteDatabase database =databaseHelper.getReadableDatabase();
 
         List<MovieDetail> favMovies =new ArrayList<>();
-        Cursor  cursor = database.query(DatabaseHelper.FAVOURITE_MOVIE_TABLE_NAME,null,null,null,null,null,DatabaseHelper.ID +"DESC");
+        Cursor  cursor = database.query(DatabaseHelper.FAVOURITE_MOVIE_TABLE_NAME,null,null,null,null,null,DatabaseHelper.ID +" DESC");
         while(cursor.moveToNext())
         {
             int movieId=cursor.getInt(cursor.getColumnIndex(DatabaseHelper.MOVIE_ID));
@@ -132,19 +133,19 @@ public class Favourite
         return favMovies;
     }
 
-    public static List<MovieDetail> getFavTVShowDetails(Context context)
+    public static List<ShowDetail> getFavTVShowDetails(Context context)
     {
         DatabaseHelper databaseHelper =new DatabaseHelper(context);
         SQLiteDatabase database =databaseHelper.getReadableDatabase();
 
-        List<MovieDetail> favTVShows =new ArrayList<>();
-        Cursor  cursor = database.query(DatabaseHelper.FAVOURITE_TV_SHOWS_NAME,null,null,null,null,null,DatabaseHelper.ID +"DESC");
+        List<ShowDetail> favTVShows =new ArrayList<>();
+        Cursor  cursor = database.query(DatabaseHelper.FAVOURITE_TV_SHOWS_NAME,null,null,null,null,null,DatabaseHelper.ID +" DESC");
         while(cursor.moveToNext())
         {
             int showId=cursor.getInt(cursor.getColumnIndex(DatabaseHelper.TV_SHOW_ID));
             String posterPath=cursor.getString(cursor.getColumnIndex(DatabaseHelper.POSTER_PATH));
             String name=cursor.getString(cursor.getColumnIndex(DatabaseHelper.NAME));
-            favTVShows.add(new MovieDetail(null,showId,null,null, name,null,posterPath,null,null,null,null,null,null,null));
+            favTVShows.add(new ShowDetail(null,showId,name,null,null,null,posterPath,null,null,null,null,null,null));
 
         }
         cursor.close();
