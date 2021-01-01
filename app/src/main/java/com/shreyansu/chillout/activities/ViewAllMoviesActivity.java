@@ -139,7 +139,7 @@ public class ViewAllMoviesActivity extends AppCompatActivity
         switch(movietype)
         {
             case Constants.NOW_SHOWING_MOVIES_TYPE:
-                knowShowingMovieCall=apiservice.getNowShowing(getResources().getString(R.string.MOVIE_DB_API_KEY),pagepresent,"IN");
+                knowShowingMovieCall=apiservice.getNowShowing( getResources().getString(R.string.MOVIE_DB_API_KEY),pagepresent,"IN");
                 knowShowingMovieCall.enqueue(new Callback<NowShowingMoviesResponse>() {
                     @Override
                     public void onResponse(Call<NowShowingMoviesResponse> call, Response<NowShowingMoviesResponse> response) {

@@ -25,4 +25,11 @@ public class Constants
     public static final int POPULAR_SHOWS_TYPE = 3;
     public static final int TOP_RATED_SHOWS_TYPE = 4;
 
+
+    public static final String YOUTUBE_WATCH_BASE_URL="https://www.youtube.com/watch?v=";
+    public static final String YOUTUBE_THUMBNAIL_BASE_URL = "http://img.youtube.com/vi/";
+    public static final String YOUTUBE_THUMBNAIL_IMAGE_QUALITY = "/hqdefault.jpg";
+
+    public static final String PERSON_ID = "person_id";
+
 }
