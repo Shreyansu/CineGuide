@@ -16,7 +16,10 @@
         <activity android:name=".activities.ViewAllShowActivity" />
         <activity android:name=".activities.getShowDetail" />
         <activity android:name=".activities.ViewAllMoviesActivity" />
-        <activity android:name=".activities.getMovieDetails" />
+        <activity android:name=".activities.getMovieDetails"
+                android:theme="@style/AppTheme.NoActionBar"
+            >
+        </activity>
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".activities.SearchActivity" />
         <activity android:name=".activities.IntroductionActivity" />

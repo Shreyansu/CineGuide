@@ -51,7 +51,7 @@ public class Favourite
         database.close();
         return isFavMovie;
     }
-    private static void removeMoviefromfavourite(Context context,Integer movieId)
+    public static void removeMoviefromfavourite(Context context,Integer movieId)
     {
         if(movieId==null)
             return ;

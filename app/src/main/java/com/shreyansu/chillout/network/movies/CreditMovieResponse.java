@@ -10,12 +10,12 @@ public class CreditMovieResponse
     private Integer id;
 
     @SerializedName("cast")
-    private List<MovieDetail> casts;
+    private List<MovieCastDetail> casts;
 
     @SerializedName("crew")
     private List<CrewMovieDetail> crews;
 
-    public CreditMovieResponse(Integer id, List<MovieDetail> casts, List<CrewMovieDetail> crews) {
+    public CreditMovieResponse(Integer id, List<MovieCastDetail> casts, List<CrewMovieDetail> crews) {
         this.id = id;
         this.casts = casts;
         this.crews = crews;
@@ -29,11 +29,11 @@ public class CreditMovieResponse
         this.id = id;
     }
 
-    public List<MovieDetail> getCasts() {
+    public List<MovieCastDetail> getCasts() {
         return casts;
     }
 
-    public void setCasts(List<MovieDetail> casts) {
+    public void setCasts(List<MovieCastDetail> casts) {
         this.casts = casts;
     }
 
@@ -41,10 +41,7 @@ public class CreditMovieResponse
         return crews;
     }
 
-    public void setCrews(List<CrewMovieDetail> crews)
-    {
+    public void setCrews(List<CrewMovieDetail> crews) {
         this.crews = crews;
     }
-
-
 }

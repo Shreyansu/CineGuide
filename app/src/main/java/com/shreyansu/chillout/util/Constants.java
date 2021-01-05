@@ -31,5 +31,6 @@ public class Constants
     public static final String YOUTUBE_THUMBNAIL_IMAGE_QUALITY = "/hqdefault.jpg";
 
     public static final String PERSON_ID = "person_id";
+    public static final String IMDB_BASE_URL = "http://www.imdb.com/title/";
 
 }
