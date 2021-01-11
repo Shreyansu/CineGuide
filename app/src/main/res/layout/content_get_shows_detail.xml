@@ -124,6 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="15dp"
+            android:id="@+id/horizontal_line_shows"
             android:background="#C1C0C3"
             android:visibility="gone"/>
 

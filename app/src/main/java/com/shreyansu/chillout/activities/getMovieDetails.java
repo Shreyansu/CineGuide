@@ -356,13 +356,12 @@ public class getMovieDetails extends AppCompatActivity
                     kdescription.setText("");
 
                 setDetails(response.body().getReleaseDate(),response.body().getRuntime());
-
                 setTrailer();
                 line.setVisibility(View.VISIBLE);
-
                 setCasts();
-
                 getSimilarMovies();
+
+
 
 
 
@@ -426,6 +425,7 @@ public class getMovieDetails extends AppCompatActivity
                 {
                     kMovieCreditCall=call.clone();
                     kMovieCreditCall.enqueue(this);
+                    return;
                 }
                 if(response.body()==null)
                     return;
@@ -464,6 +464,7 @@ public class getMovieDetails extends AppCompatActivity
                 {
                     kMovieTrailerCall=call.clone();
                     kMovieTrailerCall.enqueue(this);
+                    return;
                 }
                 if(response.body()==null)
                     return;
@@ -471,12 +472,12 @@ public class getMovieDetails extends AppCompatActivity
                     return;
                 for(Video video: response.body().getVideos())
                 {
-                    if(video!=null && video.getSite()!=null && video.getSite().equals("Youtube") && video.getType()!=null && video.getType().equals("Trailer"))
+                    if(video!=null && video.getSite()!=null && video.getSite().equals("YouTube") && video.getType()!=null && video.getType().equals("Trailer"))
                     {
                         kTrailers.add(video);
                     }
                     if(!kTrailers.isEmpty())
-                        kMovieTrailer.setText(View.VISIBLE);
+                        kMovieTrailer.setVisibility(View.VISIBLE);
                     kTrailerAdapter.notifyDataSetChanged();
                 }
 

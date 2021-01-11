@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="@layout/activity_get_movie_details"
     tools:context=".activities.getMovieDetails"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >
 
     <LinearLayout
@@ -117,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/trailer_recyc_view"
-            android:nestedScrollingEnabled="true"/>
+            android:nestedScrollingEnabled="false"/>
 
 
         <View
@@ -144,7 +145,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:id="@+id/cast_movie_detail_rec_view"
-            android:nestedScrollingEnabled="true"/>
+            android:nestedScrollingEnabled="false"/>
 
 
         <TextView

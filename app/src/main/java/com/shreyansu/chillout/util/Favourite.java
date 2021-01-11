@@ -99,7 +99,7 @@ public class Favourite
         database.close();
         return isTVShowFav;
     }
-    private static void removeTVShowsfromfavourite(Context context,Integer showId)
+    public static void removeTVShowsfromfavourite(Context context,Integer showId)
     {
         if(showId==null)
             return ;

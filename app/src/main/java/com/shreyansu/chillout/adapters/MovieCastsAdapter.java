@@ -35,7 +35,7 @@ public class MovieCastsAdapter extends RecyclerView.Adapter<MovieCastsAdapter.Ca
     @Override
     public CastViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        return new CastViewHolder(LayoutInflater.from(kContext).inflate(R.layout.video_item,parent,false));
+        return new CastViewHolder(LayoutInflater.from(kContext).inflate(R.layout.cast_item,parent,false));
 
     }
 

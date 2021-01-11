@@ -76,13 +76,13 @@ public interface ApiInterface
     Call<Shows> getShowsDetails(@Path("id") Integer ShowId,@Query("api_key") String apiKey);
 
     @GET("tv/{id}/videos")
-    Call<VideoResponse> getShowsVideos(@Path("id") Integer movieId,@Query("api_key") String apiKey);
+    Call<VideoResponse> getShowsVideos(@Path("id") Integer ShowId,@Query("api_key") String apiKey);
 
     @GET("tv/{id}/credits")
-    Call<ShowCreditResponse> getShowCredits(@Path("id") Integer movieId, @Query("api_key") String apiKey);
+    Call<ShowCreditResponse> getShowCredits(@Path("id") Integer ShowId, @Query("api_key") String apiKey);
 
     @GET("tv/{id}/similar")
-    Call<SimilarShowResponse> getSimilarShows(@Path("id") Integer movieId, @Query("api_key") String apiKey, @Query("page") Integer page);
+    Call<SimilarShowResponse> getSimilarShows(@Path("id") Integer ShowId, @Query("api_key") String apiKey, @Query("page") Integer page);
 
 
     @GET("genre/tv/list")

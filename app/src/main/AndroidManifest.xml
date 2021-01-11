@@ -14,7 +14,10 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.CastDetailActivity"></activity>
         <activity android:name=".activities.ViewAllShowActivity" />
-        <activity android:name=".activities.getShowDetail" />
+        <activity android:name=".activities.getShowDetail"
+            android:theme="@style/AppTheme.NoActionBar"
+
+            ></activity>
         <activity android:name=".activities.ViewAllMoviesActivity" />
         <activity android:name=".activities.getMovieDetails"
                 android:theme="@style/AppTheme.NoActionBar"
