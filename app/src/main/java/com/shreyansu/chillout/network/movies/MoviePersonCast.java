@@ -31,9 +31,10 @@ public class MoviePersonCast
     private String creditId;
     @SerializedName("video")
     private Boolean video;
+    @SerializedName("id")
+    private Integer id;
 
-
-    public MoviePersonCast(Double voteAverage, String title, String releaseDate, Integer voteCount, String backdropPath, String overview, String posterPath, Boolean adult, List<Integer> genreIds, String originalLanguage, String character, String creditId, Boolean video) {
+    public MoviePersonCast(Double voteAverage, String title, String releaseDate, Integer voteCount, String backdropPath, String overview, String posterPath, Boolean adult, List<Integer> genreIds, String originalLanguage, String character, String creditId, Boolean video, Integer id) {
         this.voteAverage = voteAverage;
         this.title = title;
         this.releaseDate = releaseDate;
@@ -47,6 +48,7 @@ public class MoviePersonCast
         this.character = character;
         this.creditId = creditId;
         this.video = video;
+        this.id = id;
     }
 
     public Double getVoteAverage() {
@@ -151,5 +153,13 @@ public class MoviePersonCast
 
     public void setVideo(Boolean video) {
         this.video = video;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
