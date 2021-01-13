@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
@@ -26,6 +27,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.shreyansu.chillout.BroadCastConnectivtiy;
 import com.shreyansu.chillout.R;
@@ -228,6 +230,33 @@ public class getMovieDetails extends AppCompatActivity
     }
 
     @Override
+    protected void onResume()
+    {
+
+        super.onResume();
+        if(!isActivityLoaded && !connectivityStatus.isConnected(getMovieDetails.this))
+        {
+            snackbar=Snackbar.make(kTitletext,"No Internet Connection", BaseTransientBottomBar.LENGTH_INDEFINITE);
+            snackbar.show();
+            kConnectivityBroadCastReciever=new BroadCastConnectivtiy(new BroadCastConnectivtiy.connectivityRecieverListener() {
+                @Override
+                public void OnNetworkConnectionConnected() {
+                        snackbar.dismiss();;
+                        isActivityLoaded=true;
+                        loadActivity();
+                        isBroadCastRecieverRegistered=false;
+                        unregisterReceiver(kConnectivityBroadCastReciever);
+                }
+            });
+            IntentFilter intentFilter=new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+            isBroadCastRecieverRegistered=true;
+            registerReceiver(kConnectivityBroadCastReciever,intentFilter);
+
+        }
+
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(kMovieDetailCall!=null)
@@ -361,14 +390,6 @@ public class getMovieDetails extends AppCompatActivity
                 setCasts();
                 getSimilarMovies();
 
-
-
-
-
-
-
-
-
             }
 
             @Override
@@ -416,6 +437,7 @@ public class getMovieDetails extends AppCompatActivity
 
     private void setCasts()
     {
+        kCastDetail.setVisibility(View.VISIBLE);
         ApiInterface apiService=ApiClient.getClient().create(ApiInterface.class);
         kMovieCreditCall=apiService.getMovieCredits(kMovieid,getResources().getString(R.string.MOVIE_DB_API_KEY));
         kMovieCreditCall.enqueue(new Callback<CreditMovieResponse>() {
@@ -438,8 +460,8 @@ public class getMovieDetails extends AppCompatActivity
                         kCasts.add(casts);
 
                 }
-                if(!kCasts.isEmpty())
-                    kCastDetail.setVisibility(View.VISIBLE);
+//                if(!kCasts.isEmpty())
+//                    kCastDetail.setVisibility(View.VISIBLE);
                 kCastAdapter.notifyDataSetChanged();
 
             }

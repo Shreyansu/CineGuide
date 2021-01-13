@@ -178,12 +178,10 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <include layout="@layout/content_get_movie_detail"/>
-
-
 
 
     </com.google.android.material.appbar.AppBarLayout>
+    <include layout="@layout/content_get_movie_detail"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

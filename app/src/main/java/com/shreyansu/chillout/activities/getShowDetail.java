@@ -283,16 +283,16 @@ public class getShowDetail extends AppCompatActivity
             kSimilarShowCall.cancel();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if(isBroadCastRecieverRegistered)
-        {
-            isBroadCastRecieverRegistered=false;
-            unregisterReceiver(kConnectivityBroadCastReciever);
-        }
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//
+//        if(isBroadCastRecieverRegistered)
+//        {
+//            isBroadCastRecieverRegistered=false;
+//            unregisterReceiver(kConnectivityBroadCastReciever);
+//        }
+//    }
 
     private void loadActivity()
     {
@@ -413,11 +413,7 @@ public class getShowDetail extends AppCompatActivity
 
                 line.setVisibility(View.VISIBLE);
                 setCasts();
-
                 setSimilarShows();
-
-
-
 
             }
 
