@@ -45,8 +45,6 @@ public class FavMoviesFragment extends Fragment
         klayout=(LinearLayout) view.findViewById(R.id.linear_layout_rec_view_fav_movies);
 
         loadFavMovies();
-
-
         return view;
 
     }

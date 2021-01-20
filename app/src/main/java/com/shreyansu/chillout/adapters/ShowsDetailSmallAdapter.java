@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.shreyansu.chillout.R;
 import com.shreyansu.chillout.activities.getShowDetail;
 import com.shreyansu.chillout.network.tvshows.ShowDetail;
@@ -27,7 +29,9 @@ public class ShowsDetailSmallAdapter extends RecyclerView.Adapter<ShowsDetailSma
     private Context context;
     private List<ShowDetail> kShows;
 
-    public ShowsDetailSmallAdapter(Context context, List<ShowDetail> kShows) {
+    public ShowsDetailSmallAdapter(Context context, List<ShowDetail> kShows)
+    {
+
         this.context = context;
         this.kShows = kShows;
     }
@@ -42,12 +46,34 @@ public class ShowsDetailSmallAdapter extends RecyclerView.Adapter<ShowsDetailSma
     @Override
     public void onBindViewHolder(@NonNull ShowViewHolder holder, int position)
     {
+        Glide.with(context.getApplicationContext()).load(Constants.IMAGE_LOADING_BASE_URL_500+kShows.get(position).getPosterPath())
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.ShowPosterImage);
+
+        if(kShows.get(position).getName()!=null)
+            holder.ShowTitle.setText(kShows.get(position).getName());
+        else
+            holder.ShowTitle.setText("");
+
+        if(Favourite.isTVShowFav(context,kShows.get(position).getId()))
+        {
+            holder.ShowFavButtonImage.setImageResource(R.drawable.ic_facourite);
+            holder.ShowFavButtonImage.setEnabled(false);
+        }
+        else
+        {
+            holder.ShowFavButtonImage.setImageResource(R.drawable.ic_favourite);
+            holder.ShowFavButtonImage.setEnabled(true);
+        }
 
 
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
+
         return kShows.size();
     }
 
@@ -59,7 +85,6 @@ public class ShowsDetailSmallAdapter extends RecyclerView.Adapter<ShowsDetailSma
         private TextView ShowTitle;
         public ShowViewHolder(@NonNull View itemView)
         {
-
             super(itemView);
             ShowCard=(CardView) itemView.findViewById(R.id.card_view_show_card);
             ShowPosterImage=(ImageView) itemView.findViewById(R.id.image_view_show_card);

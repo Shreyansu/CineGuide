@@ -381,7 +381,7 @@ public class tvShowFragment extends Fragment
                 {
                     kPopularShowCall=call.clone();
                     kPopularShowCall.enqueue(this);
-                    return;
+//                    return;
                 }
                 if(response.body()==null)
                     return;
@@ -392,9 +392,9 @@ public class tvShowFragment extends Fragment
                 for(ShowDetail detail: response.body().getResults())
                 {
                     if(detail!=null && detail.getBackdropPath()!=null)
-                        konAirShows.add(detail);
+                        kpopularShows.add(detail);
                 }
-                konAirAdapter.notifyDataSetChanged();
+                kpopularAdapter.notifyDataSetChanged();
             }
 
             @Override

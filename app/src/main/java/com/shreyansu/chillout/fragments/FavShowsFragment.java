@@ -43,9 +43,7 @@ public class FavShowsFragment extends Fragment
         kFavShowsAdapter=new ShowsDetailSmallAdapter(getContext(),kFavShows);
         kShowsFavRecView.setAdapter(kFavShowsAdapter);
         kShowsFavRecView.setLayoutManager(new GridLayoutManager(getContext(),3));
-
         klayout=(LinearLayout) view.findViewById(R.id.linear_layout_rec_view_fav_shows);
-
         loadFavShows();
         return view;
     }

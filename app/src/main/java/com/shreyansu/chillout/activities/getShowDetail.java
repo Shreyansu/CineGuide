@@ -439,7 +439,7 @@ public class getShowDetail extends AppCompatActivity
                 {
                     kSimilarShowCall=call.clone();
                     kSimilarShowCall.enqueue(this);
-                    return;
+//                    return;
                 }
                 if(response.body()==null)
                     return;

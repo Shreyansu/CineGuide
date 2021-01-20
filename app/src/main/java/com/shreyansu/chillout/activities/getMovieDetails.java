@@ -346,7 +346,7 @@ public class getMovieDetails extends AppCompatActivity
                         }).into(kBackdropImageView);
 
 
-                if(response.body().getTitle()==null)
+                if(response.body().getTitle()!=null)
                     kTitletext.setText(response.body().getTitle());
                 else
                     kTitletext.setText("");
@@ -429,7 +429,8 @@ public class getMovieDetails extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<SimilarMovieResponse> call, Throwable t) {
+            public void onFailure(Call<SimilarMovieResponse> call, Throwable t)
+            {
 
             }
         });
@@ -437,10 +438,12 @@ public class getMovieDetails extends AppCompatActivity
 
     private void setCasts()
     {
-        kCastDetail.setVisibility(View.VISIBLE);
+
         ApiInterface apiService=ApiClient.getClient().create(ApiInterface.class);
         kMovieCreditCall=apiService.getMovieCredits(kMovieid,getResources().getString(R.string.MOVIE_DB_API_KEY));
-        kMovieCreditCall.enqueue(new Callback<CreditMovieResponse>() {
+        kMovieCreditCall.enqueue(new Callback<CreditMovieResponse>()
+        {
+
             @Override
             public void onResponse(Call<CreditMovieResponse> call, Response<CreditMovieResponse> response) {
                 if(!response.isSuccessful())
@@ -460,14 +463,16 @@ public class getMovieDetails extends AppCompatActivity
                         kCasts.add(casts);
 
                 }
-//                if(!kCasts.isEmpty())
-//                    kCastDetail.setVisibility(View.VISIBLE);
+                if(!kCasts.isEmpty())
+                    kCastDetail.setVisibility(View.VISIBLE);
                 kCastAdapter.notifyDataSetChanged();
 
             }
 
             @Override
-            public void onFailure(Call<CreditMovieResponse> call, Throwable t) {
+            public void onFailure(Call<CreditMovieResponse> call, Throwable t)
+            {
+
 
             }
         });
@@ -506,7 +511,9 @@ public class getMovieDetails extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<VideoResponse> call, Throwable t) {
+            public void onFailure(Call<VideoResponse> call, Throwable t)
+            {
+
 
             }
         });
